@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Fleet policy: AI bots are welcome (never block them).
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+Sitemap: https://thecloudops.co.uk/sitemap.xml
