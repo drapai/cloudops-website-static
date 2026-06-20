@@ -3,7 +3,9 @@
 // Secrets (Pages project env): RESEND_API_KEY (required), TURNSTILE_SECRET (optional).
 
 const TO = "contact@thecloudops.co.uk";
-const FROM = "TheCloudOps Website <noreply@thecloudops.co.uk>";
+// Send AS contact@ (domain verified in Resend; DKIM d=thecloudops.co.uk aligns
+// for DMARC). reply_to is set to the submitter so replies reach the customer.
+const FROM = "TheCloudOps <contact@thecloudops.co.uk>";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const json = (obj, status = 200) =>
