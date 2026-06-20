@@ -23,8 +23,12 @@ header{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
 .brand{display:flex;align-items:center;gap:10px;font-family:"Sora";font-weight:700;font-size:18px}
 .brand img{width:32px;height:32px;border-radius:8px}
 .nav-links{display:flex;align-items:center;gap:28px}
-.nav-links a{color:var(--muted);font-size:15px;font-weight:500}
-.nav-links a:hover{color:#fff}
+/* Plain nav links: high-contrast near-white (was --muted gray, hard to read,
+   and its specificity was also greying out the .btn-primary text). Exclude
+   .btn so buttons keep their own colors. */
+.nav-links a:not(.btn){color:#ececf3;font-size:15px;font-weight:600}
+.nav-links a:not(.btn):hover{color:var(--cyan)}
+.nav-links a:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
 .btn{display:inline-block;border-radius:999px;padding:11px 22px;font-weight:700;font-size:15px;
   border:1px solid transparent;transition:transform .15s ease,background .15s ease}
 .btn:hover{transform:translateY(-1px)}
