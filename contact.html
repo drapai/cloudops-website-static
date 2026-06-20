@@ -35,14 +35,63 @@
 </header>
 
 <main>
-  <article class="wrap prose" style="text-align:center">
-    <h1>Get in <span class="grad">touch</span></h1>
-    <p style="max-width:56ch;margin:0 auto 30px">Tell us what you're trying to build or automate. We'll reply with a clear, practical plan and a free consultation — usually within one business day.</p>
-    <p><a class="email-pill" href="mailto:contact@thecloudops.co.uk?subject=Project%20enquiry">contact@thecloudops.co.uk</a></p>
-    <p style="margin-top:36px;color:var(--dim);font-size:15px">Prefer LinkedIn? Reach us at
-      <a class="accent" href="https://linkedin.com/company/thecloudops" rel="noopener">linkedin.com/company/thecloudops</a>.
+  <article class="wrap prose">
+    <h1 style="text-align:center">Get in <span class="grad">touch</span></h1>
+    <p style="max-width:56ch;margin:0 auto 30px;text-align:center">Tell us what you're trying to build or automate. We'll reply with a clear, practical plan and a free consultation — usually within one business day.</p>
+
+    <form id="contact-form" style="max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:14px">
+      <input type="text" name="name" placeholder="Your name" required
+        style="padding:13px 16px;border-radius:12px;background:var(--panel);border:1px solid var(--border);color:#fff;font-size:15px">
+      <input type="email" name="email" placeholder="Your email" required
+        style="padding:13px 16px;border-radius:12px;background:var(--panel);border:1px solid var(--border);color:#fff;font-size:15px">
+      <input type="text" name="subject" placeholder="Subject (optional)"
+        style="padding:13px 16px;border-radius:12px;background:var(--panel);border:1px solid var(--border);color:#fff;font-size:15px">
+      <textarea name="message" placeholder="How can we help?" required rows="5"
+        style="padding:13px 16px;border-radius:12px;background:var(--panel);border:1px solid var(--border);color:#fff;font-size:15px;resize:vertical"></textarea>
+      <!-- honeypot: hidden from humans, bots fill it -->
+      <input type="text" name="company" tabindex="-1" autocomplete="off"
+        style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true">
+      <button type="submit" class="btn btn-primary" style="border:none;cursor:pointer">Send message</button>
+      <p id="form-status" role="status" style="min-height:20px;text-align:center;font-size:15px;margin:0"></p>
+    </form>
+
+    <p style="margin-top:28px;color:var(--dim);font-size:15px;text-align:center">Or email
+      <a class="accent" href="mailto:contact@thecloudops.co.uk">contact@thecloudops.co.uk</a> ·
+      <a class="accent" href="https://linkedin.com/company/thecloudops" rel="noopener">LinkedIn</a>
     </p>
   </article>
+  <script>
+    (function () {
+      var f = document.getElementById("contact-form");
+      var s = document.getElementById("form-status");
+      f.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        var btn = f.querySelector("button[type=submit]");
+        btn.disabled = true; s.style.color = "var(--muted)"; s.textContent = "Sending…";
+        try {
+          var payload = Object.fromEntries(new FormData(f).entries());
+          var r = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          var d = await r.json().catch(function () { return {}; });
+          if (r.ok && d.success) {
+            f.reset(); s.style.color = "#3ddc84";
+            s.textContent = "Thanks — your message is on its way. We'll be in touch shortly.";
+          } else {
+            s.style.color = "#ff6b6b";
+            s.textContent = (d && d.error) || "Something went wrong. Please email contact@thecloudops.co.uk.";
+          }
+        } catch (err) {
+          s.style.color = "#ff6b6b";
+          s.textContent = "Network error. Please email contact@thecloudops.co.uk.";
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    })();
+  </script>
 </main>
 
 <footer>
